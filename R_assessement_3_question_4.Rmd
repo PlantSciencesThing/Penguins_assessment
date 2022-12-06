@@ -120,10 +120,10 @@ ggsave(filename = "Adelie_regression/plot.png",
 
 
 # 6.Biological interpretations
-***Negative frequency dependent selection** may be occurring. In the current climate birds with deep culmens are rare (although not obvious from the data, would need to test this theory), so access more resources and can thus gain a higher body mass. 
-*Birds with deeper culmens may be able to access a wider variety of food niches, so therefore have access to more resources and can gain more body mass than their competitors with shallower culmens.
-*Similarly, maybe a deeper culmen does not enable you to access a greater variety of food resources than your competitors, but it enables you to access the most rich and abundant resources. For example, deep culmen birds feed from one food resource, and shallow culmen birds utilise another, but the food resource of the deep culmen birds is less seasonal, more reliable, and more abundant.
-***Developmental cause** Maybe it is genetically predetermined, that individuals with deeper culmens also have larger body masses. 
-*Note that all of these interpretations are theories for the relationship observed, and would all need to be supported further with evidence. 
+-**Negative frequency dependent selection** may be occurring. In the current climate birds with deep culmens are rare (although not obvious from the data, would need to test this theory), so access more resources and can thus gain a higher body mass. 
+-Birds with deeper culmens may be able to access a wider variety of food niches, so therefore have access to more resources and can gain more body mass than their competitors with shallower culmens.
+-Similarly, maybe a deeper culmen does not enable you to access a greater variety of food resources than your competitors, but it enables you to access the most rich and abundant resources. For example, deep culmen birds feed from one food resource, and shallow culmen birds utilise another, but the food resource of the deep culmen birds is less seasonal, more reliable, and more abundant.
+-**Developmental cause** Maybe it is genetically predetermined, that individuals with deeper culmens also have larger body masses. 
+-Note that all of these interpretations are theories for the relationship observed, and would all need to be supported further with evidence. 
 
 
