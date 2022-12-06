@@ -4,7 +4,7 @@ output: html_document
 ---
 # 1.Loading the data
 
-Set the working directory
+Set the working directory and open the Libraries, Cleaning and Subsetting_Adelie files.
 I have loaded the necessary packages (including the dataset) in another file called Libraries.R. 
 I have saved my Cleaning function  (to clean the data) in another file.
 Here, I load these so R knows where to find these files, and that they are needed here. 
