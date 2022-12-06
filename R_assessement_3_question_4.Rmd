@@ -1,0 +1,129 @@
+---
+title: "R assessment 3 Question 4"
+output: html_document
+---
+# 1.Loading the data
+
+Set the working directory
+I have loaded the necessary packages (including the dataset) in another file called Libraries.R. 
+I have saved my Cleaning function  (to clean the data) in another file.
+Here, I load these so R knows where to find these files, and that they are needed here. 
+```{r}
+source("Functions/Libraries.R")
+source("Functions/Cleaning.R")
+```
+
+Saving the raw data as a csv in the folder data_raw.
+This is important, since any edits I make to the dataset herein are specific to this research question.
+Also makes the research reproducible since anyone can access the same starting dataset.
+```{r}
+write.csv(penguins_raw, paste0("data_raw/penguins_raw.csv"))
+```
+
+# 2.Cleaning the data
+
+Here, I create a new dataframe called penguins_clean, which includes the data from penguins_raw after the cleaning function has been applied. This has removed spaces and capital letters from column names etc., as seen when names(penguins_clean) is called.
+```{r}
+penguins_clean <- cleaning(penguins_raw)
+names(penguins_clean)
+```
+
+Saving the clean data in the folder data_clean.
+```{r}
+write.csv(penguins_clean, paste0("data_clean/penguins_clean.csv"))
+```
+
+# 3.Exploratory plots
+
+I want to investigate the relationship between culmen depth and body mass, to see if we can use estimates of culmen depth to predict body mass for penguins.
+This will be useful because if a causative relationship exists, we can use field data on culmen depths (which is easier to collect, from photographs etc.) to predict body mass, saving time and resources.
+Here, I plot the penguins_clean data for all species, and use the geom_smooth function to add linear regression lines. 
+This suggests that there is a positive correlation between culmen depth and body mass, so this relationship will be worthwhile investigating in greater depth. I will now test whether this relationship is statistically significant for one species. 
+
+```{r}
+ggplot(penguins_clean, aes(x = culmen_depth_mm, y = body_mass_g, colour = species, shape = species)) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  scale_colour_manual(values = c("darkorange","purple","cyan4")) +
+  labs(title = "Relationship between culmen depth and body mass in penguins",
+       x = "Culmen Depth (mm)",
+       y = "Body Mass (g)",
+       colour = "Penguin species",
+       shape = "Penguin species") 
+```
+
+# 4.Statistical test
+
+To investigate this relationship further I will pull out one species and investigate it in greater depth.
+The count() function reveals that Adelie penguins have the highest sample size, and this adds statistical power, so I will analyse Adelie herein.
+```{r}
+count(penguins_clean, species)
+```
+
+Here, I subset the data into a new dataframe called Adelie_dataset, which only contains information on the culmen depths and body masses of Adelie penguins.
+The subsetting function is saved in the file Subsetting_Adelie.R, so I tell R where it is located, and that I need to use it.
+I then run the function on the penguins_clean dataset, to create the new Adelie_dataset.
+
+```{r}
+source("Functions/Subsetting_Adelie.R")
+Adelie_dataset <- Subsetting_Adelie(penguins_clean)
+head(Adelie_dataset)
+```
+
+Now I will perform the statistical test - linear regression.
+
+First, I make a linear model using the Adelie_dataset, with culmen depth as the explanatory variable and body mass as the response variable.
+I then look at the model output using the summary() function.
+
+```{r}
+Adelie_model <- lm(body_mass_g ~ culmen_depth_mm, Adelie_dataset)
+summary(Adelie_model)
+```
+The linear model results show an F statistic of 74. This means that the correlation observed between culmen depth and body mass is statistically significant. A high proportion of the variation can be explained by the regression line. 
+The P value is less than 0.001 so the results obtained are highly statistically significant. There is a very low probability that this relationship was observed due to chance.
+The adjusted R^2 value is 0.3275, so the variation in culmen depth explains approximately 33% of the variation in body mass for Adelie penguins.
+Therefore, we can reliably use culmen depth to estimate body mass in Adelie penguins.
+
+
+# 5.Checking the assumptions of our model
+
+The Adelie data for culmen depth and body mass are close to normally distributed, so the linear model performed was appropriate, and the results and therefore reliable.
+```{r}
+plot(Adelie_model, which = 2)
+plot(Adelie_model, which = 1)
+```
+
+# 6. Plotting the linear regression 
+
+Plotting the linear regression
+```{r}
+Adelie_regression_plot <- ggplot(Adelie_dataset, aes(x = culmen_depth_mm, y = body_mass_g)) +
+  geom_point() +
+  geom_smooth(method = "lm", colour = "darkorange") +
+  labs(title = "Linear regression for Adelie penguins",
+       subtitle = "F value: 74    P value <0.01   R-squared value: 0.33   Grey: 95% Confidence interval",
+       x = "Culmen Depth (mm)",
+       y = "Body Mass (g)") +
+  theme_bw()
+
+Adelie_regression_plot
+```
+
+Now I will save the figure as a pdf
+```{r}
+ggsave(filename = "Adelie_regression/plot.png",
+       plot = Adelie_regression_plot,
+       height = 10.5, width = 14.8, 
+       units = "cm")
+```
+
+
+# 6.Biological interpretations
+***Negative frequency dependent selection** may be occurring. In the current climate birds with deep culmens are rare (although not obvious from the data, would need to test this theory), so access more resources and can thus gain a higher body mass. 
+*Birds with deeper culmens may be able to access a wider variety of food niches, so therefore have access to more resources and can gain more body mass than their competitors with shallower culmens.
+*Similarly, maybe a deeper culmen does not enable you to access a greater variety of food resources than your competitors, but it enables you to access the most rich and abundant resources. For example, deep culmen birds feed from one food resource, and shallow culmen birds utilise another, but the food resource of the deep culmen birds is less seasonal, more reliable, and more abundant.
+***Developmental cause** Maybe it is genetically predetermined, that individuals with deeper culmens also have larger body masses. 
+*Note that all of these interpretations are theories for the relationship observed, and would all need to be supported further with evidence. 
+
+
